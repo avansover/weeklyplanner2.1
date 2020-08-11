@@ -22,6 +22,7 @@ export default class Planner extends Component {
 
             let srcDay = ev.dataTransfer.getData("srcDay");
             let srcPost = ev.dataTransfer.getData("srcPost");
+            let srcPart = ev.dataTransfer.getData("srcPart");
             let srcId = ev.dataTransfer.getData("srcId");
 
             console.log(srcClass);
@@ -33,7 +34,7 @@ export default class Planner extends Component {
 
             let shiftDB = this.props.shiftSet
 
-            let shiftsNearSrc = shiftDB[srcDay].posts[srcPost].shifts
+            let shiftsNearSrc = shiftDB[srcDay].posts[srcPost].parts[srcPart].shifts
 
             for (let shiftInd = 0; shiftInd < shiftsNearSrc.length; shiftInd++) {
 
@@ -113,9 +114,7 @@ export default class Planner extends Component {
 
                     </div>
 
-
                 </div>
-
 
             </div>
         )

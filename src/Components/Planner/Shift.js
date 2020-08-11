@@ -95,6 +95,7 @@ export default class Shift extends Component {
 
         ev.dataTransfer.setData("srcDay", this.props.dayInd);
         ev.dataTransfer.setData("srcPost", this.props.postInd);
+        ev.dataTransfer.setData("srcPart", this.props.partInd);
         ev.dataTransfer.setData("srcWorkerId", this.props.shiftData.workerId);
         ev.dataTransfer.setData("srcId", ev.target.id);
         ev.dataTransfer.setData("srcClass", ev.target.className);

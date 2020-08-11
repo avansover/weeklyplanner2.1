@@ -309,6 +309,8 @@ export default class PostPart extends Component {
 
         if (srcClass === 'ticketDiv' && ev.target.className === 'dropAreaDiv') {
 
+            console.log('clone');
+
             // hundle normal clonning from ticket to planner area drop
 
             let axisX = ev.pageX
@@ -318,8 +320,6 @@ export default class PostPart extends Component {
             // let dayInd = this.props.dayInd
             // let postInd = this.props.postInd
             // let partInd = this.props.partInd
-
-            console.log('clone');
 
             this.addShiftToDB(axisX, workerId)
 
@@ -342,7 +342,6 @@ export default class PostPart extends Component {
             let dayInd = this.props.dayInd
             let postInd = this.props.postInd
             let partInd = this.props.partInd
-
             let shiftDB = this.props.shiftSet
 
             let tgtShiftId = ev.target.id
@@ -385,12 +384,42 @@ export default class PostPart extends Component {
 
             console.log('transfer');
 
+            let shiftDB = this.props.shiftSet
+
             let workerId = ev.dataTransfer.getData("srcWorkerId");
             let axisX = ev.pageX
 
             this.addShiftToDB(axisX, workerId)
 
             this.shiftSorter()
+
+            let srcId = ev.dataTransfer.getData("srcId");
+            let srcDay = ev.dataTransfer.getData("srcDay");
+            let srcPost = ev.dataTransfer.getData("srcPost");
+            let srcPart = ev.dataTransfer.getData("srcPart");
+
+            console.log(srcId.slice(srcId.indexOf('s') + 1, srcId.indexOf('w')));
+
+            let srcShiftStart = parseInt(srcId.slice(srcId.indexOf('s') + 1, srcId.indexOf('w')))
+
+            console.log(shiftDB[srcDay].posts[srcPost].parts[srcPart].shifts.filter((o) => (o.shiftStart === srcShiftStart)));
+
+            let shiftsNearSrc = shiftDB[srcDay].posts[srcPost].parts[srcPart].shifts
+
+            for (let shiftInd = 0; shiftInd < shiftsNearSrc.length; shiftInd++) {
+
+                if (shiftsNearSrc.filter((o) => (o.shiftStart === srcShiftStart))[0].shiftStart === shiftsNearSrc[shiftInd].shiftStart) {
+
+                    console.log(shiftsNearSrc[shiftInd]);
+
+
+                    var shiftToRemoveInd = shiftInd
+
+                }
+
+            }
+
+            shiftsNearSrc.splice(shiftToRemoveInd, 1)
 
             for (let k = 0; k < 2; k++) {
 
@@ -402,135 +431,137 @@ export default class PostPart extends Component {
 
             console.log('swap');
 
-            // let srcId = ev.dataTransfer.getData("srcId");
-            // let srcDay = ev.dataTransfer.getData("srcDay");
-            // let srcPost = ev.dataTransfer.getData("srcPost");
-            // let srcWorkerId = ev.dataTransfer.getData("srcWorkerId");
+            let srcId = ev.dataTransfer.getData("srcId");
+            let srcDay = ev.dataTransfer.getData("srcDay");
+            let srcPost = ev.dataTransfer.getData("srcPost");
+            let srcPart = ev.dataTransfer.getData("srcPart");
+            let srcWorkerId = ev.dataTransfer.getData("srcWorkerId");
 
-            //     console.log('swap');
-            //     console.log('srcId ' + srcId);
-            //     console.log('srcDay ' + srcDay);
-            //     console.log('srcPost ' + srcPost);
-            //     console.log('srcWorkerId ' + srcWorkerId);
+            console.log('srcId ' + srcId);
+            console.log('srcDay ' + srcDay);
+            console.log('srcPost ' + srcPost);
+            console.log('srcPart ' + srcPart);
+            console.log('srcWorkerId ' + srcWorkerId);
 
-            //     let shiftDB = this.props.shiftSet
-            //     let tgtShiftId = ev.target.id
-            //     console.log('tgtId ' + tgtShiftId);
+            let shiftDB = this.props.shiftSet
+            let tgtShiftId = ev.target.id
+            console.log('tgtId ' + tgtShiftId);
 
-            //     let tgtDay = this.props.dayInd
-            //     console.log('tgt day ' + tgtDay);
+            let tgtDay = this.props.dayInd
+            console.log('tgt day ' + tgtDay);
 
-            //     let tgtPost = this.props.dayInd
-            //     console.log('tgt post ' + tgtPost);
+            let tgtPost = this.props.postInd
+            console.log('tgt post ' + tgtPost);
 
-            //     let tgtWorkerId = tgtShiftId.slice(tgtShiftId.indexOf('w') + 1, tgtShiftId.length)
-            //     console.log('tgtWorkerId ' + tgtWorkerId);
+            let tgtPart = this.props.partInd
+            console.log('tgtPart ' + tgtPart);
+
+            let tgtWorkerId = tgtShiftId.slice(tgtShiftId.indexOf('w') + 1, tgtShiftId.length)
+            console.log('tgtWorkerId ' + tgtWorkerId);
 
 
-            //     for (let shiftInd = 0; shiftInd < shiftDB[srcDay].posts[srcPost].shifts.length; shiftInd++) {
+            for (let shiftInd = 0; shiftInd < shiftDB[srcDay].posts[srcPost].parts[srcPart].shifts.length; shiftInd++) {
 
-            //         if (shiftDB[srcDay].posts[srcPost].shifts[shiftInd].shiftId === srcId) {
+                if (shiftDB[srcDay].posts[srcPost].parts[srcPart].shifts[shiftInd].shiftId === srcId) {
 
-            //             console.log('src found');
-            //             console.log(shiftDB[srcDay].posts[srcPost].shifts[shiftInd]);
+                    console.log('src found');
+                    console.log(shiftDB[srcDay].posts[srcPost].parts[srcPart].shifts[shiftInd]);
 
-            //             var srcShiftInd = shiftInd
+                    var srcShiftInd = shiftInd
 
-            //         }
+                }
 
-            //     }
+            }
 
-            //     for (let shiftInd = 0; shiftInd < shiftDB[tgtDay].posts[tgtPost].shifts.length; shiftInd++) {
+            for (let shiftInd = 0; shiftInd < shiftDB[tgtDay].posts[tgtPost].parts[tgtPart].shifts.length; shiftInd++) {
 
-            //         if (shiftDB[tgtDay].posts[tgtPost].shifts[shiftInd].shiftId === tgtShiftId) {
+                if (shiftDB[tgtDay].posts[tgtPost].parts[tgtPart].shifts[shiftInd].shiftId === tgtShiftId) {
 
-            //             console.log('tgt found');
-            //             console.log(shiftDB[tgtDay].posts[tgtPost].shifts[shiftInd]);
+                    console.log('tgt found');
+                    console.log(shiftDB[tgtDay].posts[tgtPost].parts[tgtPart].shifts[shiftInd]);
 
-            //             var tgtShiftInd = shiftInd
+                    var tgtShiftInd = shiftInd
 
-            //         }
+                }
 
-            //     }
+            }
 
-            //     console.log(srcShiftInd);
-            //     console.log(tgtShiftInd);
+            console.log(srcShiftInd);
+            console.log(tgtShiftInd);
 
-            //     console.log('remaking shiftId ');
+            console.log('remaking shiftId ');
 
-            //     let srcNewShiftId = srcId.slice(0, srcId.indexOf('w') + 1) + tgtWorkerId
+            let srcNewShiftId = srcId.slice(0, srcId.indexOf('w') + 1) + tgtWorkerId
 
-            //     console.log('newSrcId ' + srcNewShiftId);
+            console.log('newSrcId ' + srcNewShiftId);
 
-            //     let tgtNewShiftId = tgtShiftId.slice(0, tgtShiftId.indexOf('w') + 1) + srcWorkerId
+            let tgtNewShiftId = tgtShiftId.slice(0, tgtShiftId.indexOf('w') + 1) + srcWorkerId
 
-            //     console.log('tgtNewShiftId ' + tgtNewShiftId);
+            console.log('tgtNewShiftId ' + tgtNewShiftId);
 
-            //     shiftDB[srcDay].posts[srcPost].shifts[srcShiftInd].workerId = tgtWorkerId
-            //     shiftDB[srcDay].posts[srcPost].shifts[srcShiftInd].shiftId = srcNewShiftId
+            shiftDB[srcDay].posts[srcPost].parts[srcPart].shifts[srcShiftInd].workerId = tgtWorkerId
+            shiftDB[srcDay].posts[srcPost].parts[srcPart].shifts[srcShiftInd].shiftId = srcNewShiftId
 
-            //     shiftDB[tgtDay].posts[tgtPost].shifts[tgtShiftInd].workerId = srcWorkerId
-            //     shiftDB[tgtDay].posts[tgtPost].shifts[tgtShiftInd].shiftId = tgtNewShiftId
+            shiftDB[tgtDay].posts[tgtPost].parts[tgtPart].shifts[tgtShiftInd].workerId = srcWorkerId
+            shiftDB[tgtDay].posts[tgtPost].parts[tgtPart].shifts[tgtShiftInd].shiftId = tgtNewShiftId
 
-            //     for (let k = 0; k < 2; k++) {
+            for (let k = 0; k < 2; k++) {
 
-            //         for (let shiftInd = 0; shiftInd < shiftDB[srcDay].posts[srcPost].shifts.length - 1; shiftInd++) {
+                for (let shiftInd = 0; shiftInd < shiftDB[srcDay].posts[srcPost].parts[srcPart].shifts.length - 1; shiftInd++) {
 
-            //             console.log(shiftDB[srcDay].posts[srcPost].shifts);
+                    console.log(shiftDB[srcDay].posts[srcPost].parts[srcPart].shifts);
 
-            //             let firstShift = shiftDB[srcDay].posts[srcPost].shifts[shiftInd]
-            //             let secondShift = shiftDB[srcDay].posts[srcPost].shifts[shiftInd + 1]
+                    let firstShift = shiftDB[srcDay].posts[srcPost].parts[srcPart].shifts[shiftInd]
+                    let secondShift = shiftDB[srcDay].posts[srcPost].parts[srcPart].shifts[shiftInd + 1]
 
-            //             if (firstShift.shiftStart + firstShift.shiftLength === secondShift.shiftStart && firstShift.workerId === secondShift.workerId) {
+                    if (firstShift.shiftStart + firstShift.shiftLength === secondShift.shiftStart && firstShift.workerId === secondShift.workerId) {
 
-            //                 shiftDB[srcDay].posts[srcPost].shifts.push({ workerId: firstShift.workerId, shiftStart: firstShift.shiftStart, shiftLength: firstShift.shiftLength + secondShift.shiftLength, shiftId: `d${srcDay}p${srcPost}s${firstShift.shiftStart}w${firstShift.workerId}` })
+                        shiftDB[srcDay].posts[srcPost].parts[srcPart].shifts.push({ workerId: firstShift.workerId, shiftStart: firstShift.shiftStart, shiftLength: firstShift.shiftLength + secondShift.shiftLength, shiftId: `d${srcDay}p${srcPost}t${srcPart}s${firstShift.shiftStart}w${firstShift.workerId}` })
 
-            //                 let localShiftNum = shiftDB[srcDay].posts[srcPost].shifts.length
+                        let localShiftNum = shiftDB[srcDay].posts[srcPost].parts[srcPart].shifts.length
 
-            //                 let newMergedShift = shiftDB[srcDay].posts[srcPost].shifts[localShiftNum - 1]
+                        let newMergedShift = shiftDB[srcDay].posts[srcPost].parts[srcPart].shifts[localShiftNum - 1]
 
-            //                 shiftDB[srcDay].posts[srcPost].shifts[shiftInd] = newMergedShift
+                        shiftDB[srcDay].posts[srcPost].parts[srcPart].shifts[shiftInd] = newMergedShift
 
-            //                 shiftDB[srcDay].posts[srcPost].shifts.splice(shiftInd + 1, 1)
+                        shiftDB[srcDay].posts[srcPost].parts[srcPart].shifts.splice(shiftInd + 1, 1)
 
-            //                 shiftDB[srcDay].posts[srcPost].shifts.pop()
+                        shiftDB[srcDay].posts[srcPost].parts[srcPart].shifts.pop()
 
-            //             }
+                    }
 
-            //         }
+                }
 
-            //         for (let shiftInd = 0; shiftInd < shiftDB[tgtDay].posts[tgtPost].shifts.length - 1; shiftInd++) {
+                for (let shiftInd = 0; shiftInd < shiftDB[tgtDay].posts[tgtPost].parts[tgtPart].shifts.length - 1; shiftInd++) {
 
-            //             console.log(shiftDB[tgtDay].posts[tgtPost].shifts);
+                    console.log(shiftDB[tgtDay].posts[tgtPost].parts[tgtPart].shifts);
 
-            //             let firstShift = shiftDB[tgtDay].posts[tgtPost].shifts[shiftInd]
-            //             let secondShift = shiftDB[tgtDay].posts[tgtPost].shifts[shiftInd + 1]
+                    let firstShift = shiftDB[tgtDay].posts[tgtPost].parts[tgtPart].shifts[shiftInd]
+                    let secondShift = shiftDB[tgtDay].posts[tgtPost].parts[tgtPart].shifts[shiftInd + 1]
 
-            //             if (firstShift.shiftStart + firstShift.shiftLength === secondShift.shiftStart && firstShift.workerId === secondShift.workerId) {
+                    if (firstShift.shiftStart + firstShift.shiftLength === secondShift.shiftStart && firstShift.workerId === secondShift.workerId) {
 
-            //                 shiftDB[tgtDay].posts[tgtPost].shifts.push({ workerId: firstShift.workerId, shiftStart: firstShift.shiftStart, shiftLength: firstShift.shiftLength + secondShift.shiftLength, shiftId: `d${tgtDay}p${tgtPost}s${firstShift.shiftStart}w${firstShift.workerId}` })
+                        shiftDB[tgtDay].posts[tgtPost].parts[tgtPart].shifts.push({ workerId: firstShift.workerId, shiftStart: firstShift.shiftStart, shiftLength: firstShift.shiftLength + secondShift.shiftLength, shiftId: `d${tgtDay}p${tgtPost}t${tgtPart}s${firstShift.shiftStart}w${firstShift.workerId}` })
 
-            //                 let localShiftNum = shiftDB[tgtDay].posts[tgtPost].shifts.length
+                        let localShiftNum = shiftDB[tgtDay].posts[tgtPost].parts[tgtPart].shifts.length
 
-            //                 let newMergedShift = shiftDB[tgtDay].posts[tgtPost].shifts[localShiftNum - 1]
+                        let newMergedShift = shiftDB[tgtDay].posts[tgtPost].parts[tgtPart].shifts[localShiftNum - 1]
 
-            //                 shiftDB[tgtDay].posts[tgtPost].shifts[shiftInd] = newMergedShift
+                        shiftDB[tgtDay].posts[tgtPost].parts[tgtPart].shifts[shiftInd] = newMergedShift
 
-            //                 shiftDB[tgtDay].posts[tgtPost].shifts.splice(shiftInd + 1, 1)
+                        shiftDB[tgtDay].posts[tgtPost].parts[tgtPart].shifts.splice(shiftInd + 1, 1)
 
-            //                 shiftDB[tgtDay].posts[tgtPost].shifts.pop()
+                        shiftDB[tgtDay].posts[tgtPost].parts[tgtPart].shifts.pop()
 
-            //             }
+                    }
 
-            //         }
+                }
 
-            //     }
+            }
 
 
 
         }
-
-        console.log(ev.target.className);
 
         this.deleteMarker()
 
@@ -547,7 +578,7 @@ export default class PostPart extends Component {
                     position: "absolute",
                     width: `${this.props.partObj.partLength}px`,
                     left: `${this.props.partObj.partStart}px`,
-                    // top: '-1px',
+                    top: '1px',
                     display: 'flex',
                     height: '23px',
                     borderRadius: '6px',
