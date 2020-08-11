@@ -1,0 +1,54 @@
+.App {
+    text-align: center;
+}
+
+#plnWrkBox {
+    display: flex;
+}
+
+#plannerDiv {
+    border: 0px solid black;
+    height: fit-content;
+    width: fit-content;
+}
+
+.dayBodyDiv {
+    display: flex;
+    width: 820px;
+    border: 1px solid black;
+    border-radius: 0.25rem;
+    margin-bottom: 3px;
+    padding: 3px;
+}
+
+.dayNameDiv {
+    display: flex;
+    border: 0px solid black;
+    width: 1.5rem;
+    align-items: center;
+}
+
+.postBodyDiv {
+    display: flex;
+    margin: 3px;
+}
+
+.partsBodyDiv {
+    display: flex;
+   
+}
+
+.dropAreaDiv {
+    display: flex;
+    border: 1px solid black;
+
+}
+
+.ticketDiv {
+    height: 4rem;
+    width: 6rem;
+    border-radius: 1rem;
+    border: 1px solid black;
+    margin: 0.5rem;
+    padding: 0.5rem;
+}
