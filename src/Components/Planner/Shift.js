@@ -91,7 +91,7 @@ export default class Shift extends Component {
 
     drag = (ev) => {
 
-        console.log(ev.target);
+        //console.log(ev.target);
 
         ev.dataTransfer.setData("srcDay", this.props.dayInd);
         ev.dataTransfer.setData("srcPost", this.props.postInd);
