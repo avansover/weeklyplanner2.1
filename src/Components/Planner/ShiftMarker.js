@@ -146,6 +146,8 @@ export default class ShiftMarker extends Component {
 
 
         }
+
+
         return { mrkStr: markerStart, mrkLnth: markerLength }
 
 
@@ -230,7 +232,7 @@ export default class ShiftMarker extends Component {
                         fontSize: '12px'
                     }}
                 >
-                    {this.markerData().mrkStr}
+                    {this.markerData().mrkStr + this.props.partObj.partStart}
                 </div>
 
                 <div
@@ -239,7 +241,7 @@ export default class ShiftMarker extends Component {
                         fontSize: '12px'
                     }}
                 >
-                    {this.markerData().mrkStr + this.markerData().mrkLnth}
+                    {this.markerData().mrkStr + this.markerData().mrkLnth + this.props.partObj.partStart}
                 </div>
 
             </div>

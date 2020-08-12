@@ -220,7 +220,7 @@ export default class PostPart extends Component {
 
             }
 
-            shiftDB[dayInd].posts[postInd].parts[partInd].shifts.push({ workerId: workerId, shiftStart: shiftStart, shiftLength: shiftLength, shiftId: `d${dayInd}p${postInd}t${partInd}s${shiftStart}w${workerId}` })
+            shiftDB[dayInd].posts[postInd].parts[partInd].shifts.push({ workerId: workerId, part: partInd, shiftStart: shiftStart, shiftLength: shiftLength, shiftId: `d${dayInd}p${postInd}t${partInd}s${shiftStart + partStart}w${workerId}` })
 
             console.log(shiftDB);
 
@@ -265,6 +265,8 @@ export default class PostPart extends Component {
         let postInd = this.props.postInd
         let partInd = this.props.partInd
 
+        let partStart = this.props.partObj.partStart
+
         for (let shiftInd = 0; shiftInd < shiftDB[dayInd].posts[postInd].parts[partInd].shifts.length - 1; shiftInd++) {
 
             console.log(shiftDB[dayInd].posts[postInd].parts[partInd].shifts);
@@ -274,7 +276,7 @@ export default class PostPart extends Component {
 
             if (firstShift.shiftStart + firstShift.shiftLength === secondShift.shiftStart && firstShift.workerId === secondShift.workerId) {
 
-                shiftDB[dayInd].posts[postInd].parts[partInd].shifts.push({ workerId: firstShift.workerId, shiftStart: firstShift.shiftStart, shiftLength: firstShift.shiftLength + secondShift.shiftLength, shiftId: `d${dayInd}p${postInd}t${partInd}s${firstShift.shiftStart}w${firstShift.workerId}` })
+                shiftDB[dayInd].posts[postInd].parts[partInd].shifts.push({ workerId: firstShift.workerId, part: partInd, shiftStart: firstShift.shiftStart, shiftLength: firstShift.shiftLength + secondShift.shiftLength, shiftId: `d${dayInd}p${postInd}t${partInd}s${firstShift.shiftStart + partStart}w${firstShift.workerId}` })
 
                 let localShiftNum = shiftDB[dayInd].posts[postInd].parts[partInd].shifts.length
 
@@ -397,27 +399,33 @@ export default class PostPart extends Component {
             let srcDay = ev.dataTransfer.getData("srcDay");
             let srcPost = ev.dataTransfer.getData("srcPost");
             let srcPart = ev.dataTransfer.getData("srcPart");
+            let srcPartStart = ev.dataTransfer.getData("srcPartStart");
+
+            console.log(srcPartStart);
 
             console.log(srcId.slice(srcId.indexOf('s') + 1, srcId.indexOf('w')));
 
             let srcShiftStart = parseInt(srcId.slice(srcId.indexOf('s') + 1, srcId.indexOf('w')))
 
-            console.log(shiftDB[srcDay].posts[srcPost].parts[srcPart].shifts.filter((o) => (o.shiftStart === srcShiftStart)));
-
             let shiftsNearSrc = shiftDB[srcDay].posts[srcPost].parts[srcPart].shifts
+
+            console.log(shiftsNearSrc.filter((o) => (o.shiftStart + parseInt(srcPartStart) === srcShiftStart)));
+
+            console.log(shiftsNearSrc);
 
             for (let shiftInd = 0; shiftInd < shiftsNearSrc.length; shiftInd++) {
 
-                if (shiftsNearSrc.filter((o) => (o.shiftStart === srcShiftStart))[0].shiftStart === shiftsNearSrc[shiftInd].shiftStart) {
+                if (shiftsNearSrc.filter((o) => (o.shiftStart + parseInt(srcPartStart) === srcShiftStart))[0].shiftStart === shiftsNearSrc[shiftInd].shiftStart) {
 
                     console.log(shiftsNearSrc[shiftInd]);
-
 
                     var shiftToRemoveInd = shiftInd
 
                 }
 
             }
+
+            console.log(shiftToRemoveInd);
 
             shiftsNearSrc.splice(shiftToRemoveInd, 1)
 
@@ -435,7 +443,12 @@ export default class PostPart extends Component {
             let srcDay = ev.dataTransfer.getData("srcDay");
             let srcPost = ev.dataTransfer.getData("srcPost");
             let srcPart = ev.dataTransfer.getData("srcPart");
+            let srcPartStart = ev.dataTransfer.getData("srcPartStart");
             let srcWorkerId = ev.dataTransfer.getData("srcWorkerId");
+
+            console.log(srcPartStart);
+
+
 
             console.log('srcId ' + srcId);
             console.log('srcDay ' + srcDay);
@@ -455,6 +468,8 @@ export default class PostPart extends Component {
 
             let tgtPart = this.props.partInd
             console.log('tgtPart ' + tgtPart);
+
+            let partStart = this.props.partObj.partStart
 
             let tgtWorkerId = tgtShiftId.slice(tgtShiftId.indexOf('w') + 1, tgtShiftId.length)
             console.log('tgtWorkerId ' + tgtWorkerId);
@@ -516,7 +531,7 @@ export default class PostPart extends Component {
 
                     if (firstShift.shiftStart + firstShift.shiftLength === secondShift.shiftStart && firstShift.workerId === secondShift.workerId) {
 
-                        shiftDB[srcDay].posts[srcPost].parts[srcPart].shifts.push({ workerId: firstShift.workerId, shiftStart: firstShift.shiftStart, shiftLength: firstShift.shiftLength + secondShift.shiftLength, shiftId: `d${srcDay}p${srcPost}t${srcPart}s${firstShift.shiftStart}w${firstShift.workerId}` })
+                        shiftDB[srcDay].posts[srcPost].parts[srcPart].shifts.push({ workerId: firstShift.workerId, shiftStart: firstShift.shiftStart, shiftLength: firstShift.shiftLength + secondShift.shiftLength, shiftId: `d${srcDay}p${srcPost}t${srcPart}s${firstShift.shiftStart + srcPartStart}w${firstShift.workerId}` })
 
                         let localShiftNum = shiftDB[srcDay].posts[srcPost].parts[srcPart].shifts.length
 
@@ -541,7 +556,7 @@ export default class PostPart extends Component {
 
                     if (firstShift.shiftStart + firstShift.shiftLength === secondShift.shiftStart && firstShift.workerId === secondShift.workerId) {
 
-                        shiftDB[tgtDay].posts[tgtPost].parts[tgtPart].shifts.push({ workerId: firstShift.workerId, shiftStart: firstShift.shiftStart, shiftLength: firstShift.shiftLength + secondShift.shiftLength, shiftId: `d${tgtDay}p${tgtPost}t${tgtPart}s${firstShift.shiftStart}w${firstShift.workerId}` })
+                        shiftDB[tgtDay].posts[tgtPost].parts[tgtPart].shifts.push({ workerId: firstShift.workerId, shiftStart: firstShift.shiftStart, shiftLength: firstShift.shiftLength + secondShift.shiftLength, shiftId: `d${tgtDay}p${tgtPost}t${tgtPart}s${firstShift.shiftStart + partStart}w${firstShift.workerId}` })
 
                         let localShiftNum = shiftDB[tgtDay].posts[tgtPost].parts[tgtPart].shifts.length
 

@@ -78,11 +78,17 @@ export default class App extends Component {
           name: 'Th', posts: [
             {
               name: 'post1', parts: [
-                { partStart: 0, partLength: 722, shifts: [{ workerId: '15', shiftStart: 300, shiftLength: 200, shiftId: 'd4p0t0s300w15' }] }]
+                { partStart: 0, partLength: 722, shifts: [] }]
             },
             {
               name: 'post4', parts:
-                [{ partStart: 0, partLength: 722, shifts: [] }]
+                [{
+                  partStart: 240, partLength: 242, shifts: [
+                    { workerId: '15', part: 0, shiftStart: 0, shiftLength: 70, shiftId: 'd4p1t0s240w15' },
+                    { workerId: '1', part: 0, shiftStart: 80, shiftLength: 70, shiftId: 'd4p1t0s320w1' },
+                    { workerId: '2', part: 0, shiftStart: 160, shiftLength: 80, shiftId: 'd4p1t0s400w2' },
+                  ]
+                }]
             }
           ]
         },
@@ -277,19 +283,14 @@ export default class App extends Component {
 
       for (let shiftInd = 0; shiftInd < tempShiftDB[dayInd].posts[postInd].parts[partInd].shifts.length; shiftInd++) {
 
-        console.log(tempShiftDB[dayInd].posts[postInd].parts[partInd].partStart);
-        console.log(tempShiftDB[dayInd].posts[postInd].parts[partInd].shifts[shiftInd].shiftStart);
-        console.log(shiftOldLeft);
+        // console.log(tempShiftDB[dayInd].posts[postInd].parts[partInd].partStart);
+        // console.log(tempShiftDB[dayInd].posts[postInd].parts[partInd].shifts[shiftInd].shiftStart);
+        // console.log(shiftOldLeft);
 
         let partStart = tempShiftDB[dayInd].posts[postInd].parts[partInd].partStart
         let shiftStart = tempShiftDB[dayInd].posts[postInd].parts[partInd].shifts[shiftInd].shiftStart
 
         if (partStart + shiftStart === shiftOldLeft) {
-
-
-
-
-
 
           // the if here check what shift we resize activly
 
@@ -299,41 +300,41 @@ export default class App extends Component {
 
         }
 
-        // else if (tempShiftDB[dayInd].posts[postInd].parts[partInd].shifts[shiftInd].shiftStart < shiftOldLeft) {
-        //   // the if here check what shift we resize passivly
+        else if (tempShiftDB[dayInd].posts[postInd].parts[partInd].shifts[shiftInd].shiftStart < shiftOldLeft) {
+          // the if here check what shift we resize passivly
 
-        //   // console.log(tempShiftDB[dayInd].posts[postInd].shifts[shiftInd].shiftStart);
-        //   // console.log(tempShiftDB[dayInd].posts[postInd].shifts[shiftInd].shiftLength);
+          // console.log(tempShiftDB[dayInd].posts[postInd].shifts[shiftInd].shiftStart);
+          // console.log(tempShiftDB[dayInd].posts[postInd].shifts[shiftInd].shiftLength);
 
-        //   let sideShiftStart = tempShiftDB[dayInd].posts[postInd].parts[partInd].shifts[shiftInd].shiftStart
-        //   let sideShiftLength = tempShiftDB[dayInd].posts[postInd].parts[partInd].shifts[shiftInd].shiftLength
+          let sideShiftStart = tempShiftDB[dayInd].posts[postInd].parts[partInd].shifts[shiftInd].shiftStart
+          let sideShiftLength = tempShiftDB[dayInd].posts[postInd].parts[partInd].shifts[shiftInd].shiftLength
 
-        //   if (shiftLeftFinal < sideShiftStart + sideShiftLength) {
+          if (shiftLeftFinal < sideShiftStart + sideShiftLength) {
 
-        //     // console.log(tempShiftDB[dayInd].posts[postInd].shifts[shiftInd].shiftStart);
-        //     // console.log(tempShiftDB[dayInd].posts[postInd].shifts[shiftInd].shiftLength);
+            // console.log(tempShiftDB[dayInd].posts[postInd].shifts[shiftInd].shiftStart);
+            // console.log(tempShiftDB[dayInd].posts[postInd].shifts[shiftInd].shiftLength);
 
-        //     let newSideShiftLength = shiftLeftFinal - sideShiftStart
+            let newSideShiftLength = shiftLeftFinal - sideShiftStart
 
-        //     if (newSideShiftLength > 0) {
+            if (newSideShiftLength > 0) {
 
-        //       tempShiftDB[dayInd].posts[postInd].parts[partInd].shifts[shiftInd].shiftLength = newSideShiftLength
+              tempShiftDB[dayInd].posts[postInd].parts[partInd].shifts[shiftInd].shiftLength = newSideShiftLength
 
-        //     } else if (newSideShiftLength <= 0) {
+            } else if (newSideShiftLength <= 0) {
 
-        //       console.log(shiftInd);
-        //       console.log(newSideShiftLength);
+              console.log(shiftInd);
+              console.log(newSideShiftLength);
 
-        //       tempShiftDB[dayInd].posts[postInd].parts[partInd].shifts.splice(shiftInd, 1)
+              tempShiftDB[dayInd].posts[postInd].parts[partInd].shifts.splice(shiftInd, 1)
 
-        //       shiftInd--
+              shiftInd--
 
 
-        //     }
+            }
 
-        //   }
+          }
 
-        // }
+        }
 
       }
 
@@ -345,15 +346,17 @@ export default class App extends Component {
 
       for (let shiftInd = 0; shiftInd < tempShiftDB[dayInd].posts[postInd].parts[partInd].shifts.length; shiftInd++) {
 
-        if (tempShiftDB[dayInd].posts[postInd].parts[partInd].shifts[shiftInd].shiftStart === shiftOldLeft) {
+        let partStart = tempShiftDB[dayInd].posts[postInd].parts[partInd].partStart
+        let shiftStart = tempShiftDB[dayInd].posts[postInd].parts[partInd].shifts[shiftInd].shiftStart
 
+        if (partStart + shiftStart === shiftOldLeft) {
 
           tempShiftDB[dayInd].posts[postInd].parts[partInd].shifts[shiftInd].shiftLength = shiftLengthFinal
           tempShiftDB[dayInd].posts[postInd].parts[partInd].shifts[shiftInd].shiftId = `d${dayInd}p${postInd}t${partInd}s${shiftOldLeft}w${workerId}`
 
           // the if here check what shift we resize passivly
 
-        } else if (tempShiftDB[dayInd].posts[postInd].shifts[shiftInd].shiftStart > shiftOldLeft) {
+        } else if (tempShiftDB[dayInd].posts[postInd].parts[partInd].shifts[shiftInd].shiftStart > shiftOldLeft) {
 
           let sideShiftStart = tempShiftDB[dayInd].posts[postInd].parts[partInd].shifts[shiftInd].shiftStart
           let sideShiftLength = tempShiftDB[dayInd].posts[postInd].parts[partInd].shifts[shiftInd].shiftLength
