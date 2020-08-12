@@ -145,6 +145,7 @@ export default class Post extends Component {
                                     <PostPart
                                         key={i}
                                         deleteMarker={this.props.deleteMarker}
+                                        setResizeData={this.props.setResizeData}
 
                                         shiftSet={this.props.shiftSet}
                                         workerDB={this.props.workerDB}

@@ -607,6 +607,7 @@ export default class PostPart extends Component {
                         partInd={this.props.partInd}
                         shiftInd={i}
 
+                        partObj={this.props.partObj}
                         shiftData={o}
 
                     //markerWorkerID4={this.props.markerWorkerID3}
