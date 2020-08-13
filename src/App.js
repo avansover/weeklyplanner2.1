@@ -50,7 +50,7 @@ export default class App extends Component {
           name: 'Tu', posts: [
             {
               name: 'post3', parts: [
-                { partStart: 0, partLength: 722, shifts: [] }]
+                { partStart: 240, partLength: 242, shifts: [] }]
             },
             {
               name: 'post4', parts:
@@ -296,11 +296,9 @@ export default class App extends Component {
 
           tempShiftDB[dayInd].posts[postInd].parts[partInd].shifts[shiftInd].shiftStart = shiftLeftFinal
           tempShiftDB[dayInd].posts[postInd].parts[partInd].shifts[shiftInd].shiftLength = shiftLengthFinal
-          tempShiftDB[dayInd].posts[postInd].parts[partInd].shifts[shiftInd].shiftId = `d${dayInd}p${postInd}t${partInd}s${shiftLeftFinal}w${workerId}`
+          tempShiftDB[dayInd].posts[postInd].parts[partInd].shifts[shiftInd].shiftId = `d${dayInd}p${postInd}t${partInd}s${shiftLeftFinal+partStart}w${workerId}`
 
-        }
-
-        else if (tempShiftDB[dayInd].posts[postInd].parts[partInd].shifts[shiftInd].shiftStart < shiftOldLeft) {
+        } else if (tempShiftDB[dayInd].posts[postInd].parts[partInd].shifts[shiftInd].shiftStart < shiftOldLeft) {
           // the if here check what shift we resize passivly
 
           // console.log(tempShiftDB[dayInd].posts[postInd].shifts[shiftInd].shiftStart);

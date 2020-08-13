@@ -36,11 +36,19 @@ export default class Shift extends Component {
 
     shiftColor = () => {
 
+        let elementId = `d${this.props.dayInd}p${this.props.postInd}t${this.props.partInd}s${this.props.shiftData.shiftStart + this.props.partObj.partStart}w${this.props.shiftData.workerId}`
+
         var workerId = this.props.shiftData.workerId
 
-        var workerFromWrokerDB = this.props.workerDB.filter((o) => (o.id === workerId))
+        // that "if" has nothing to do with coloring, it just a test to see that IDs are being kept as they should
 
-        return workerFromWrokerDB[0].color
+        if (elementId === this.props.shiftData.shiftId) {
+
+            var workerFromWrokerDB = this.props.workerDB.filter((o) => (o.id === workerId))
+
+            return workerFromWrokerDB[0].color
+
+        }
 
     }
 
@@ -93,7 +101,7 @@ export default class Shift extends Component {
 
         //console.log(ev.target);
 
-        
+
 
         ev.dataTransfer.setData("srcDay", this.props.dayInd);
         ev.dataTransfer.setData("srcPost", this.props.postInd);
@@ -213,7 +221,7 @@ export default class Shift extends Component {
                 // console.log(shiftOldLeft + ShiftOldWidth - shortestShift)
 
                 // I need correct a bug when shift end some times at 1 pixel more or less then needed
-                //the consol reveal that the propblem is with the shiftOldLeft
+                // the consol reveal that the propblem is with the shiftOldLeft
 
                 // for the shift div itself
                 shift.style.left = (Math.floor((eve.pageX - dropAreaLeft - partObj.partStart + 1) / 5)) * 5 + 'px'
@@ -223,7 +231,7 @@ export default class Shift extends Component {
                 let shiftLeftFinal = (Math.floor((eve.pageX - dropAreaLeft - partObj.partStart + 1) / 5)) * 5
                 let shiftLengthFinal = ShiftOldWidth + shiftOldLeft - (Math.floor((eve.pageX - dropAreaLeft + 1) / 5)) * 5
 
-                this.setState({ shiftLength: shiftLengthFinal })
+                // this.setState({ shiftLength: shiftLengthFinal })
 
                 this.setState({ shiftLeftFinal: shiftLeftFinal })
                 this.setState({ shiftLengthFinal: shiftLengthFinal })
@@ -239,47 +247,44 @@ export default class Shift extends Component {
 
                 }
 
-               
+
                 // pushing the right end of shifts while resizing shift run over them
 
                 for (let i = 0; i < shiftIdArr.length; i++) {
 
-                    
-
                     let shiftEnd = shiftIdArr[i].shiftStart + shiftIdArr[i].shiftLength
-
 
                     let otherShift = document.getElementById(`${shiftIdArr[i].shiftId}`)
 
-                    //console.log(shiftIdArr[i].shiftId);
-                    // console.log(shiftLeftFinal + partObj.partStart);
+                    console.log(shiftIdArr[i].shiftId);
+                    console.log(shiftLeftFinal + partObj.partStart);
                     console.log(otherShift);
 
                     if (shiftLeftFinal < shiftEnd) {
 
-                        //otherShift.style.width = shiftLeftFinal - shiftIdArr[i].shiftStart + 'px'
+                        otherShift.style.width = shiftLeftFinal - shiftIdArr[i].shiftStart + 'px'
 
                         // I'm not sure what is going to be inside the shift, till then I'll just remove it content
 
-                        // if (shiftLeftFinal - shiftIdArr[i].shiftStart < 100 && shiftIdArr[i].shiftStart < shiftLeftFinal) {
+                        if (shiftLeftFinal - shiftIdArr[i].shiftStart < 100 && shiftIdArr[i].shiftStart < shiftLeftFinal) {
 
-                        //     // console.log(shiftIdArr[i].shiftStart);
-                        //     // console.log(shiftLeftFinal);
+                            // console.log(shiftIdArr[i].shiftStart);
+                            // console.log(shiftLeftFinal);
 
-                        //     const shiftElement = document.getElementById(`${shiftIdArr[i].shiftId}`);
+                            const shiftElement = document.getElementById(`${shiftIdArr[i].shiftId}`);
 
-                        //     while (shiftElement.lastElementChild) {
+                            while (shiftElement.lastElementChild) {
 
-                        //         shiftElement.removeChild(shiftElement.lastElementChild);
+                                shiftElement.removeChild(shiftElement.lastElementChild);
 
-                        //     }
+                            }
 
-                        // }
+                        }
 
 
                     } else {
 
-                        //otherShift.style.width = shiftIdArr[i].shiftLength + 'px'
+                        otherShift.style.width = shiftIdArr[i].shiftLength + 'px'
 
                     }
 
@@ -323,12 +328,15 @@ export default class Shift extends Component {
         } else if (resizer === 'rightResizer') {
 
             let shiftsObj = shiftDB[dayInd].posts[postInd].parts[partInd].shifts
+            let partStart = shiftDB[dayInd].posts[postInd].parts[partInd].partStart
 
             let shiftIdArr = []
 
             for (let shiftInd = 0; shiftInd < shiftsObj.length; shiftInd++) {
 
-                if (shiftOldLeft < shiftDB[dayInd].posts[postInd].parts[partInd].shifts[shiftInd].shiftStart) {
+                let everyShiftStart = shiftDB[dayInd].posts[postInd].parts[partInd].shifts[shiftInd].shiftStart
+
+                if (shiftOldLeft < everyShiftStart + partStart) {
 
                     shiftIdArr.push(shiftsObj[shiftInd])
 
@@ -362,17 +370,23 @@ export default class Shift extends Component {
 
                 }
 
-                // console.log(shiftIdArr);
+                //console.log(shiftIdArr);
 
                 for (let i = 0; i < shiftIdArr.length; i++) {
 
-                    let shiftStart = shiftIdArr[i].shiftStart
+                    let shiftStart = shiftIdArr[i].shiftStart + partObj.partStart
+
+                    // console.log(shiftOldLeft + shiftLengthFinal);
+                    // console.log(shiftStart);
+
                     let otherShift = document.getElementById(`${shiftIdArr[i].shiftId}`)
 
-                    if (eve.pageX - dropAreaLeft > shiftStart && eve.pageX - dropAreaLeft < shiftIdArr[i].shiftStart + shiftIdArr[i].shiftLength) {
+                    if (shiftOldLeft + shiftLengthFinal > shiftStart && shiftOldLeft + shiftLengthFinal < shiftIdArr[i].shiftStart + shiftIdArr[i].shiftLength + partObj.partStart) {
 
-                        otherShift.style.left = shiftOldLeft + shiftLengthFinal + 'px'
-                        otherShift.style.width = shiftIdArr[i].shiftStart + shiftIdArr[i].shiftLength - shiftOldLeft - shiftLengthFinal + 'px'
+                        //console.log('interval');
+
+                        otherShift.style.left = shiftOldLeft + shiftLengthFinal - partObj.partStart + 'px'
+                        otherShift.style.width = shiftIdArr[i].shiftStart + shiftIdArr[i].shiftLength + partObj.partStart - shiftOldLeft - shiftLengthFinal + 'px'
 
                         // I'm not sure what is going to be inside the shift, till then I'll just remove it content
 
@@ -390,14 +404,14 @@ export default class Shift extends Component {
 
                         } else {
 
-                            otherShift.style.left = shiftOldLeft + shiftLengthFinal + 'px'
-                            otherShift.style.width = shiftIdArr[i].shiftStart + shiftIdArr[i].shiftLength - shiftOldLeft - shiftLengthFinal + 'px'
+                            otherShift.style.left = shiftOldLeft + shiftLengthFinal - partObj.partStart + 'px'
+                            otherShift.style.width = shiftIdArr[i].shiftStart + shiftIdArr[i].shiftLength + partObj.partStart - shiftOldLeft - shiftLengthFinal + 'px'
 
                         }
 
                         // I had some problem when resizing the right edge too fast, so I needed to bolster it conditions
 
-                    } else if (eve.pageX - dropAreaLeft >= shiftIdArr[i].shiftStart + shiftIdArr[i].shiftLength) {
+                    } else if (shiftOldLeft + shiftLengthFinal >= shiftIdArr[i].shiftStart + shiftIdArr[i].shiftLength + partObj.partStart) {
 
                         // console.log(shiftIdArr[i]);
 
@@ -405,7 +419,7 @@ export default class Shift extends Component {
 
                     } else {
 
-                        // console.log(shiftIdArr[i]);
+                        //console.log(shiftIdArr[i]);
 
                         otherShift.style.left = shiftIdArr[i].shiftStart + 'px'
                         otherShift.style.width = shiftIdArr[i].shiftLength + 'px'
@@ -430,31 +444,35 @@ export default class Shift extends Component {
 
                 this.setState({ shiftLengthFinal: partObj.partStart + partObj.partLength - shiftOldLeft })
 
-                // for (let i = 0; i < shiftIdArr.length; i++) {
+                for (let i = 0; i < shiftIdArr.length; i++) {
 
-                //     let shiftStart = shiftIdArr[i].shiftStart
-                //     let otherShift = document.getElementById(`${shiftIdArr[i].shiftId}`)
+                    let shiftStart = shiftIdArr[i].shiftStart
+                    let otherShift = document.getElementById(`${shiftIdArr[i].shiftId}`)
 
-                //     otherShift.style.left = shiftStart + 'px' // my own paranoia
+                    otherShift.style.left = shiftStart + 'px' // my own paranoia
 
-                //     otherShift.style.width = 0 + 'px'
+                    otherShift.style.width = 0 + 'px'
 
-                //     // I'm not sure what is going to be inside the shift, till then I'll just remove it content
+                    this.setState({ shiftDataVIew: 'none' })
+                    // I'm not sure what is going to be inside the shift, till then I'll just remove it content
 
+                }
 
-                // }
-
-            } else if (eve.pageX - dropAreaLeft < shortestShift + shiftOldLeft) {
-
-                // should research how to hundel when mouse move realy fast to the left side
-
-
-                console.log(eve.pageX - dropAreaLeft);
-                console.log(shiftOldLeft + shortestShift);
-
-                //     console.log(eve.pageX - dropAreaLeft);
+            } else if (eve.pageX - dropAreaLeft < shortestShift + shiftOldLeft + partObj.partStart) {
 
                 shift.style.width = shortestShift + 'px'
+
+                for (let i = 0; i < shiftIdArr.length; i++) {
+
+                    let otherShift = document.getElementById(`${shiftIdArr[i].shiftId}`)
+
+                    otherShift.style.left = shiftIdArr[i].shiftStart + 'px' //corection... this is not paranoia, this is real
+
+                    otherShift.style.width = shiftIdArr[i].shiftLength + 'px'
+
+                    // I'm not sure what is going to be inside the shift, till then I'll just remove it content
+
+                }
 
                 this.setState({ shortestShift })
 
@@ -521,11 +539,11 @@ export default class Shift extends Component {
 
         if (this.state.shiftLeftFinal === undefined) {
 
-            return this.props.shiftData.shiftStart
+            return this.props.shiftData.shiftStart + this.props.partObj.partStart
 
         } else {
 
-            return this.state.shiftLeftFinal
+            return this.state.shiftLeftFinal + this.props.partObj.partStart
 
         }
 
@@ -535,15 +553,15 @@ export default class Shift extends Component {
 
         if (this.state.shiftLeftFinal === undefined && this.state.shiftLengthFinal === undefined) {
 
-            return this.props.shiftData.shiftStart + this.props.shiftData.shiftLength
+            return this.props.shiftData.shiftStart + this.props.shiftData.shiftLength + this.props.partObj.partStart
 
         } else if (this.state.shiftLeftFinal === undefined && this.state.shiftLengthFinal !== undefined) {
 
-            return this.props.shiftData.shiftStart + this.state.shiftLengthFinal
+            return this.props.shiftData.shiftStart + this.state.shiftLengthFinal + this.props.partObj.partStart
 
         } else if (this.state.shiftLeftFinal !== undefined && this.state.shiftLengthFinal !== undefined) {
 
-            return this.state.shiftLeftFinal + this.state.shiftLengthFinal
+            return this.state.shiftLeftFinal + this.state.shiftLengthFinal + this.props.partObj.partStart
 
         }
 

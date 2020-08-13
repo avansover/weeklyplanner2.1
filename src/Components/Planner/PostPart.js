@@ -401,17 +401,15 @@ export default class PostPart extends Component {
             let srcPart = ev.dataTransfer.getData("srcPart");
             let srcPartStart = ev.dataTransfer.getData("srcPartStart");
 
-            console.log(srcPartStart);
+            // console.log(srcPartStart);
 
-            console.log(srcId.slice(srcId.indexOf('s') + 1, srcId.indexOf('w')));
+            // console.log(srcId.slice(srcId.indexOf('s') + 1, srcId.indexOf('w')));
 
             let srcShiftStart = parseInt(srcId.slice(srcId.indexOf('s') + 1, srcId.indexOf('w')))
 
             let shiftsNearSrc = shiftDB[srcDay].posts[srcPost].parts[srcPart].shifts
 
-            console.log(shiftsNearSrc.filter((o) => (o.shiftStart + parseInt(srcPartStart) === srcShiftStart)));
-
-            console.log(shiftsNearSrc);
+            // console.log(shiftsNearSrc.filter((o) => (o.shiftStart + parseInt(srcPartStart) === srcShiftStart)));
 
             for (let shiftInd = 0; shiftInd < shiftsNearSrc.length; shiftInd++) {
 
@@ -425,7 +423,7 @@ export default class PostPart extends Component {
 
             }
 
-            console.log(shiftToRemoveInd);
+            // console.log(shiftToRemoveInd);
 
             shiftsNearSrc.splice(shiftToRemoveInd, 1)
 
@@ -446,9 +444,7 @@ export default class PostPart extends Component {
             let srcPartStart = ev.dataTransfer.getData("srcPartStart");
             let srcWorkerId = ev.dataTransfer.getData("srcWorkerId");
 
-            console.log(srcPartStart);
-
-
+            //console.log(srcPartStart);
 
             console.log('srcId ' + srcId);
             console.log('srcDay ' + srcDay);
@@ -469,7 +465,7 @@ export default class PostPart extends Component {
             let tgtPart = this.props.partInd
             console.log('tgtPart ' + tgtPart);
 
-            let partStart = this.props.partObj.partStart
+            let tgtPartStart = this.props.partObj.partStart
 
             let tgtWorkerId = tgtShiftId.slice(tgtShiftId.indexOf('w') + 1, tgtShiftId.length)
             console.log('tgtWorkerId ' + tgtWorkerId);
@@ -504,6 +500,8 @@ export default class PostPart extends Component {
             console.log(srcShiftInd);
             console.log(tgtShiftInd);
 
+
+
             console.log('remaking shiftId ');
 
             let srcNewShiftId = srcId.slice(0, srcId.indexOf('w') + 1) + tgtWorkerId
@@ -520,59 +518,79 @@ export default class PostPart extends Component {
             shiftDB[tgtDay].posts[tgtPost].parts[tgtPart].shifts[tgtShiftInd].workerId = srcWorkerId
             shiftDB[tgtDay].posts[tgtPost].parts[tgtPart].shifts[tgtShiftInd].shiftId = tgtNewShiftId
 
-            for (let k = 0; k < 2; k++) {
+            if (parseInt(srcDay) === tgtDay && parseInt(srcPart) === tgtPart) {
 
-                for (let shiftInd = 0; shiftInd < shiftDB[srcDay].posts[srcPost].parts[srcPart].shifts.length - 1; shiftInd++) {
+                console.log('same part');
 
-                    console.log(shiftDB[srcDay].posts[srcPost].parts[srcPart].shifts);
+                this.shiftSorter()
 
-                    let firstShift = shiftDB[srcDay].posts[srcPost].parts[srcPart].shifts[shiftInd]
-                    let secondShift = shiftDB[srcDay].posts[srcPost].parts[srcPart].shifts[shiftInd + 1]
+                for (let k = 0; k < 2; k++) {
 
-                    if (firstShift.shiftStart + firstShift.shiftLength === secondShift.shiftStart && firstShift.workerId === secondShift.workerId) {
-
-                        shiftDB[srcDay].posts[srcPost].parts[srcPart].shifts.push({ workerId: firstShift.workerId, shiftStart: firstShift.shiftStart, shiftLength: firstShift.shiftLength + secondShift.shiftLength, shiftId: `d${srcDay}p${srcPost}t${srcPart}s${firstShift.shiftStart + srcPartStart}w${firstShift.workerId}` })
-
-                        let localShiftNum = shiftDB[srcDay].posts[srcPost].parts[srcPart].shifts.length
-
-                        let newMergedShift = shiftDB[srcDay].posts[srcPost].parts[srcPart].shifts[localShiftNum - 1]
-
-                        shiftDB[srcDay].posts[srcPost].parts[srcPart].shifts[shiftInd] = newMergedShift
-
-                        shiftDB[srcDay].posts[srcPost].parts[srcPart].shifts.splice(shiftInd + 1, 1)
-
-                        shiftDB[srcDay].posts[srcPost].parts[srcPart].shifts.pop()
-
-                    }
+                    this.shiftMerger()
 
                 }
 
-                for (let shiftInd = 0; shiftInd < shiftDB[tgtDay].posts[tgtPost].parts[tgtPart].shifts.length - 1; shiftInd++) {
+            } else {
 
-                    console.log(shiftDB[tgtDay].posts[tgtPost].parts[tgtPart].shifts);
+                for (let k = 0; k < 2; k++) {
 
-                    let firstShift = shiftDB[tgtDay].posts[tgtPost].parts[tgtPart].shifts[shiftInd]
-                    let secondShift = shiftDB[tgtDay].posts[tgtPost].parts[tgtPart].shifts[shiftInd + 1]
+                    for (let shiftInd = 0; shiftInd < shiftDB[srcDay].posts[srcPost].parts[srcPart].shifts.length - 1; shiftInd++) {
 
-                    if (firstShift.shiftStart + firstShift.shiftLength === secondShift.shiftStart && firstShift.workerId === secondShift.workerId) {
+                        console.log(shiftDB[srcDay].posts[srcPost].parts[srcPart].shifts);
 
-                        shiftDB[tgtDay].posts[tgtPost].parts[tgtPart].shifts.push({ workerId: firstShift.workerId, shiftStart: firstShift.shiftStart, shiftLength: firstShift.shiftLength + secondShift.shiftLength, shiftId: `d${tgtDay}p${tgtPost}t${tgtPart}s${firstShift.shiftStart + partStart}w${firstShift.workerId}` })
+                        let firstShift = shiftDB[srcDay].posts[srcPost].parts[srcPart].shifts[shiftInd]
+                        let secondShift = shiftDB[srcDay].posts[srcPost].parts[srcPart].shifts[shiftInd + 1]
 
-                        let localShiftNum = shiftDB[tgtDay].posts[tgtPost].parts[tgtPart].shifts.length
+                        if (firstShift.shiftStart + firstShift.shiftLength === secondShift.shiftStart && firstShift.workerId === secondShift.workerId) {
 
-                        let newMergedShift = shiftDB[tgtDay].posts[tgtPost].parts[tgtPart].shifts[localShiftNum - 1]
+                            shiftDB[srcDay].posts[srcPost].parts[srcPart].shifts.push({ workerId: firstShift.workerId, shiftStart: firstShift.shiftStart, shiftLength: firstShift.shiftLength + secondShift.shiftLength, shiftId: `d${srcDay}p${srcPost}t${srcPart}s${firstShift.shiftStart + parseInt(srcPartStart)}w${firstShift.workerId}` })
 
-                        shiftDB[tgtDay].posts[tgtPost].parts[tgtPart].shifts[shiftInd] = newMergedShift
+                            let localShiftNum = shiftDB[srcDay].posts[srcPost].parts[srcPart].shifts.length
 
-                        shiftDB[tgtDay].posts[tgtPost].parts[tgtPart].shifts.splice(shiftInd + 1, 1)
+                            let newMergedShift = shiftDB[srcDay].posts[srcPost].parts[srcPart].shifts[localShiftNum - 1]
 
-                        shiftDB[tgtDay].posts[tgtPost].parts[tgtPart].shifts.pop()
+                            shiftDB[srcDay].posts[srcPost].parts[srcPart].shifts[shiftInd] = newMergedShift
+
+                            shiftDB[srcDay].posts[srcPost].parts[srcPart].shifts.splice(shiftInd + 1, 1)
+
+                            shiftDB[srcDay].posts[srcPost].parts[srcPart].shifts.pop()
+
+                        }
+
+                    }
+
+                    for (let shiftInd = 0; shiftInd < shiftDB[tgtDay].posts[tgtPost].parts[tgtPart].shifts.length - 1; shiftInd++) {
+
+                        console.log(shiftDB[tgtDay].posts[tgtPost].parts[tgtPart].shifts);
+
+                        let firstShift = shiftDB[tgtDay].posts[tgtPost].parts[tgtPart].shifts[shiftInd]
+                        let secondShift = shiftDB[tgtDay].posts[tgtPost].parts[tgtPart].shifts[shiftInd + 1]
+
+                        if (firstShift.shiftStart + firstShift.shiftLength === secondShift.shiftStart && firstShift.workerId === secondShift.workerId) {
+
+                            shiftDB[tgtDay].posts[tgtPost].parts[tgtPart].shifts.push({ workerId: firstShift.workerId, shiftStart: firstShift.shiftStart, shiftLength: firstShift.shiftLength + secondShift.shiftLength, shiftId: `d${tgtDay}p${tgtPost}t${tgtPart}s${firstShift.shiftStart + tgtPartStart}w${firstShift.workerId}` })
+
+                            let localShiftNum = shiftDB[tgtDay].posts[tgtPost].parts[tgtPart].shifts.length
+
+                            let newMergedShift = shiftDB[tgtDay].posts[tgtPost].parts[tgtPart].shifts[localShiftNum - 1]
+
+                            shiftDB[tgtDay].posts[tgtPost].parts[tgtPart].shifts[shiftInd] = newMergedShift
+
+                            shiftDB[tgtDay].posts[tgtPost].parts[tgtPart].shifts.splice(shiftInd + 1, 1)
+
+                            shiftDB[tgtDay].posts[tgtPost].parts[tgtPart].shifts.pop()
+
+                        }
 
                     }
 
                 }
 
             }
+
+
+
+
 
 
 

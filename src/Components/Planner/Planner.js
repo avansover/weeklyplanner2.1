@@ -24,6 +24,7 @@ export default class Planner extends Component {
             let srcPost = ev.dataTransfer.getData("srcPost");
             let srcPart = ev.dataTransfer.getData("srcPart");
             let srcId = ev.dataTransfer.getData("srcId");
+            let srcPartStart = ev.dataTransfer.getData("srcPartStart");
 
             console.log(srcClass);
             console.log(ev.target.className);
@@ -38,10 +39,9 @@ export default class Planner extends Component {
 
             for (let shiftInd = 0; shiftInd < shiftsNearSrc.length; shiftInd++) {
 
-                if (shiftsNearSrc.filter((o) => (o.shiftStart === srcShiftStart))[0].shiftStart === shiftsNearSrc[shiftInd].shiftStart) {
+                if (shiftsNearSrc.filter((o) => (o.shiftStart + parseInt(srcPartStart) === srcShiftStart))[0].shiftStart === shiftsNearSrc[shiftInd].shiftStart) {
 
                     console.log(shiftsNearSrc[shiftInd]);
-
 
                     var shiftToRemoveInd = shiftInd
 
@@ -99,7 +99,6 @@ export default class Planner extends Component {
                                     deleteMarker={this.props.deleteMarker}
 
                                     setResizeData={this.props.setResizeData}
-
 
                                     key={dayInd}
                                     shiftSet={this.props.shiftSet}
