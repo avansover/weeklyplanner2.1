@@ -269,6 +269,10 @@ export default class App extends Component {
 
     //console.log(resizer);
 
+
+    //console.log(shiftOldLeft);
+
+
     var tempShiftDB = [...this.state.shiftSet]
 
     // console.log(tempShiftDB[dayInd].posts[postInd].shifts);
@@ -291,12 +295,11 @@ export default class App extends Component {
         let shiftStart = tempShiftDB[dayInd].posts[postInd].parts[partInd].shifts[shiftInd].shiftStart
 
         if (partStart + shiftStart === shiftOldLeft) {
-
           // the if here check what shift we resize activly
 
           tempShiftDB[dayInd].posts[postInd].parts[partInd].shifts[shiftInd].shiftStart = shiftLeftFinal
           tempShiftDB[dayInd].posts[postInd].parts[partInd].shifts[shiftInd].shiftLength = shiftLengthFinal
-          tempShiftDB[dayInd].posts[postInd].parts[partInd].shifts[shiftInd].shiftId = `d${dayInd}p${postInd}t${partInd}s${shiftLeftFinal+partStart}w${workerId}`
+          tempShiftDB[dayInd].posts[postInd].parts[partInd].shifts[shiftInd].shiftId = `d${dayInd}p${postInd}t${partInd}s${shiftLeftFinal + partStart}w${workerId}`
 
         } else if (tempShiftDB[dayInd].posts[postInd].parts[partInd].shifts[shiftInd].shiftStart < shiftOldLeft) {
           // the if here check what shift we resize passivly
@@ -327,7 +330,6 @@ export default class App extends Component {
 
               shiftInd--
 
-
             }
 
           }
@@ -347,41 +349,43 @@ export default class App extends Component {
         let partStart = tempShiftDB[dayInd].posts[postInd].parts[partInd].partStart
         let shiftStart = tempShiftDB[dayInd].posts[postInd].parts[partInd].shifts[shiftInd].shiftStart
 
-        if (partStart + shiftStart === shiftOldLeft) {
+        //console.log(shiftStart);
+
+        if (shiftStart + partStart === shiftOldLeft) {
 
           tempShiftDB[dayInd].posts[postInd].parts[partInd].shifts[shiftInd].shiftLength = shiftLengthFinal
           tempShiftDB[dayInd].posts[postInd].parts[partInd].shifts[shiftInd].shiftId = `d${dayInd}p${postInd}t${partInd}s${shiftOldLeft}w${workerId}`
 
           // the if here check what shift we resize passivly
 
-        } else if (tempShiftDB[dayInd].posts[postInd].parts[partInd].shifts[shiftInd].shiftStart > shiftOldLeft) {
+        } else if (shiftStart + partStart > shiftOldLeft) {
 
           let sideShiftStart = tempShiftDB[dayInd].posts[postInd].parts[partInd].shifts[shiftInd].shiftStart
           let sideShiftLength = tempShiftDB[dayInd].posts[postInd].parts[partInd].shifts[shiftInd].shiftLength
 
+          if (shiftOldLeft + shiftLengthFinal > sideShiftStart + partStart) {
+
+            console.log(shiftOldLeft + shiftLengthFinal);
+            console.log(sideShiftStart + partStart);
+
+            let newSideShiftLength = sideShiftStart + sideShiftLength + partStart - shiftOldLeft - shiftLengthFinal
+            let newSideShiftLeft = shiftOldLeft + shiftLengthFinal - partStart
 
 
-          if (shiftOldLeft + shiftLengthFinal > sideShiftStart) {
+            console.log(newSideShiftLeft);
 
-
-
-            console.log(sideShiftStart);
-            console.log(sideShiftLength);
-
-            let newSideShiftLength = sideShiftStart + sideShiftLength - shiftOldLeft - shiftLengthFinal
-            let newSideShiftLeft = shiftOldLeft + shiftLengthFinal
 
             if (newSideShiftLength > 0) {
 
               let SideShiftWorkerId = tempShiftDB[dayInd].posts[postInd].parts[partInd].shifts[shiftInd].workerId;
 
-              tempShiftDB[dayInd].posts[postInd].shifts[shiftInd].parts[partInd].shiftStart = newSideShiftLeft
-              tempShiftDB[dayInd].posts[postInd].shifts[shiftInd].parts[partInd].shiftLength = newSideShiftLength
-              tempShiftDB[dayInd].posts[postInd].shifts[shiftInd].parts[partInd].shiftId = `d${dayInd}p${postInd}t${partInd}s${newSideShiftLeft}w${SideShiftWorkerId}`
+              tempShiftDB[dayInd].posts[postInd].parts[partInd].shifts[shiftInd].shiftStart = newSideShiftLeft
+              tempShiftDB[dayInd].posts[postInd].parts[partInd].shifts[shiftInd].shiftLength = newSideShiftLength
+              tempShiftDB[dayInd].posts[postInd].parts[partInd].shifts[shiftInd].shiftId = `d${dayInd}p${postInd}t${partInd}s${newSideShiftLeft + partStart}w${SideShiftWorkerId}`
 
             } else if (newSideShiftLength <= 0) {
 
-              tempShiftDB[dayInd].posts[postInd].shifts.splice(shiftInd, 1)
+              tempShiftDB[dayInd].posts[postInd].parts[partInd].shifts.splice(shiftInd, 1)
 
               shiftInd--
 
@@ -400,7 +404,7 @@ export default class App extends Component {
 
     for (let shiftInd = 0; shiftInd < tempShiftDB[dayInd].posts[postInd].parts[partInd].shifts.length - 1; shiftInd++) {
 
-      //console.log(tempShiftDB[dayInd].posts[postInd].shifts);
+      let partStart = tempShiftDB[dayInd].posts[postInd].parts[partInd].partStart
 
       let firstShift = tempShiftDB[dayInd].posts[postInd].parts[partInd].shifts[shiftInd]
       let secondShift = tempShiftDB[dayInd].posts[postInd].parts[partInd].shifts[shiftInd + 1]
@@ -410,7 +414,7 @@ export default class App extends Component {
 
       if (firstShift.shiftStart + firstShift.shiftLength === secondShift.shiftStart && firstShift.workerId === secondShift.workerId) {
 
-        tempShiftDB[dayInd].posts[postInd].parts[partInd].shifts.push({ workerId: firstShift.workerId, shiftStart: firstShift.shiftStart, shiftLength: firstShift.shiftLength + secondShift.shiftLength, shiftId: `d${dayInd}p${postInd}t${partInd}s${firstShift.shiftStart}w${firstShift.workerId}` })
+        tempShiftDB[dayInd].posts[postInd].parts[partInd].shifts.push({ workerId: firstShift.workerId, shiftStart: firstShift.shiftStart, shiftLength: firstShift.shiftLength + secondShift.shiftLength, shiftId: `d${dayInd}p${postInd}t${partInd}s${firstShift.shiftStart + partStart}w${firstShift.workerId}` })
 
         let localShiftNum = tempShiftDB[dayInd].posts[postInd].parts[partInd].shifts.length
 
