@@ -147,10 +147,27 @@ export default class ShiftMarker extends Component {
 
         }
 
+        let startMinute = (this.props.partObj.partStart + markerStart) * 2 % 60
 
-        return { mrkStr: markerStart, mrkLnth: markerLength }
+        if (startMinute < 10) {
 
+            startMinute = `0${startMinute}`
 
+        }
+
+        let startHour = (Math.floor((this.props.partObj.partStart + markerStart) / 30) + this.props.dayStart) % 24
+
+        let endMinute = (this.props.partObj.partStart + markerStart + markerLength)* 2 % 60
+
+        if (endMinute < 10) {
+
+            endMinute = `0${endMinute}`
+
+        }
+
+        let endHour = (Math.floor((this.props.partObj.partStart + markerStart + markerLength) / 30) + this.props.dayStart) % 24
+
+        return { mrkStr: markerStart, mrkLnth: markerLength, startMinute, startHour, endMinute, endHour }
 
     }
 
@@ -180,15 +197,11 @@ export default class ShiftMarker extends Component {
         // we get NaN warning on depeneded variables,
         // and the marker apears on the left of the drop area
 
-        if (this.markerData().mrkLnth === 0) {
 
-            return '#ffffff'
 
-        } else {
+        return '#000000'
 
-            return '#000000'
 
-        }
 
     }
 
@@ -201,19 +214,19 @@ export default class ShiftMarker extends Component {
 
     stopMarking = () => {
 
-       
-        
+
+
     }
 
 
 
     render() {
 
-        
+
 
         return (
             <div id='markerDiv'
-           
+
                 style={{
                     position: 'relative',
                     display: 'flex',
@@ -232,7 +245,7 @@ export default class ShiftMarker extends Component {
                         fontSize: '12px'
                     }}
                 >
-                    {this.markerData().mrkStr + this.props.partObj.partStart}
+                    {this.markerData().startHour}:{this.markerData().startMinute}
                 </div>
 
                 <div
@@ -241,7 +254,7 @@ export default class ShiftMarker extends Component {
                         fontSize: '12px'
                     }}
                 >
-                    {this.markerData().mrkStr + this.markerData().mrkLnth + this.props.partObj.partStart}
+                    {this.markerData().endHour}:{this.markerData().endMinute}
                 </div>
 
             </div>

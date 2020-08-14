@@ -59,6 +59,7 @@ export default class PostPart extends Component {
             return <ShiftMarker
                 axisX={this.state.axisX}
                 partObj={this.props.partObj}
+                dayStart={this.props.dayStart}
             />
 
         }
@@ -634,6 +635,7 @@ export default class PostPart extends Component {
 
                         shiftSet={this.props.shiftSet}
                         workerDB={this.props.workerDB}
+                        dayStart={this.props.dayStart}
 
                         dayInd={this.props.dayInd}
                         postInd={this.props.postInd}

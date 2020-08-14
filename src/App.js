@@ -122,15 +122,17 @@ export default class App extends Component {
       workerDB: [
         { id: '15', firstName: 'first', lastName: 'last', color: '#ff0000' },
         { id: '1', firstName: 'drag', lastName: 'last', color: '#00aa00' },
-        { id: '2', firstName: 'draggable 3', lastName: 'last', color: '#6666ff' },
-        { id: '3', firstName: 'draggable 4', lastName: 'last', color: '#aaaa00' },
-        { id: '4', firstName: 'draggable 5', lastName: 'last', color: '#ff00ff' },
-        { id: '124', firstName: 'draggable 6', lastName: 'last', color: '#00ffff' },
+        { id: '2', firstName: 'draggable', lastName: 'last', color: '#6666ff' },
+        { id: '3', firstName: 'worker 4', lastName: 'last', color: '#aaaa00' },
+        { id: '4', firstName: 'worker 5', lastName: 'last', color: '#ff00ff' },
+        { id: '124', firstName: 'worker 6', lastName: 'last', color: '#00ffff' },
       ],
 
       markerWorkerID: undefined,
 
-      higherBarView: 'in'
+      higherBarView: 'in',
+
+      dayStart: 7
 
     }
 
@@ -301,7 +303,7 @@ export default class App extends Component {
           tempShiftDB[dayInd].posts[postInd].parts[partInd].shifts[shiftInd].shiftLength = shiftLengthFinal
           tempShiftDB[dayInd].posts[postInd].parts[partInd].shifts[shiftInd].shiftId = `d${dayInd}p${postInd}t${partInd}s${shiftLeftFinal + partStart}w${workerId}`
 
-        } else if (tempShiftDB[dayInd].posts[postInd].parts[partInd].shifts[shiftInd].shiftStart < shiftOldLeft) {
+        } else if (tempShiftDB[dayInd].posts[postInd].parts[partInd].shifts[shiftInd].shiftStart + partStart < shiftOldLeft) {
           // the if here check what shift we resize passivly
 
           // console.log(tempShiftDB[dayInd].posts[postInd].shifts[shiftInd].shiftStart);
@@ -512,6 +514,7 @@ export default class App extends Component {
 
                 shiftSet={this.state.shiftSet}
                 workerDB={this.state.workerDB}
+                dayStart={this.state.dayStart}
 
                 markerWorkerID1={this.state.markerWorkerID}
 

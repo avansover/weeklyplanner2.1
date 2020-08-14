@@ -149,6 +149,7 @@ export default class Post extends Component {
 
                                         shiftSet={this.props.shiftSet}
                                         workerDB={this.props.workerDB}
+                                        dayStart={this.props.dayStart}
 
                                         dayInd={this.props.dayInd}
                                         postInd={this.props.postInd}

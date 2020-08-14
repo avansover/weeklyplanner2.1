@@ -164,7 +164,7 @@ export default class Shift extends Component {
         let ShiftOldWidth = this.state.ShiftOldWidth;
         let shiftOldLeft = this.state.shiftOldLeft;
 
-        let shortestShift = 10
+        let shortestShift = 5
 
         let shiftDB = [...this.props.shiftSet]
         let dayInd = this.props.dayInd
@@ -213,8 +213,6 @@ export default class Shift extends Component {
             // pointer after the start of the part but before the end of its own shift - the shortest shift
 
             if (eve.pageX - dropAreaLeft > partObj.partStart && eve.pageX - dropAreaLeft <= shiftOldLeft + ShiftOldWidth - shortestShift) {
-
-                console.log(2);
 
                 // console.log(partObj.partStart);
                 // console.log(eve.pageX - dropAreaLeft);
@@ -293,8 +291,6 @@ export default class Shift extends Component {
                 }
 
             } else if (eve.pageX - dropAreaLeft <= partObj.partStart) {
-
-                console.log(3);
 
                 // console.log(partObj.partStart);
                 // console.log(eve.pageX - dropAreaLeft);
@@ -416,7 +412,7 @@ export default class Shift extends Component {
 
                         // need to take care of rapid mouse movment
 
-                        if (shiftIdArr[i].shiftStart + shiftIdArr[i].shiftLength - shiftOldLeft - shiftLengthFinal < 100) {
+                        if (shiftIdArr[i].shiftStart + shiftIdArr[i].shiftLength - shiftOldLeft - shiftLengthFinal + partObj.partStart < 100) {
 
                             let shiftElement = document.getElementById(`${shiftIdArr[i].shiftId}`);
 
@@ -446,17 +442,6 @@ export default class Shift extends Component {
                         otherShifts.style.left = shiftIdArr[i].shiftStart + 'px'
                         otherShifts.style.width = shiftIdArr[i].shiftLength + 'px'
 
-                        // for (let i = 0; i < shiftIdArr.length; i++) {
-
-                        //     let otherShift = document.getElementById(`${shiftIdArr[i].shiftId}`)
-
-                        //     otherShift.style.left = shiftIdArr[i].shiftStart + 'px' //corection... this is not paranoia, this is real
-
-                        //     otherShift.style.width = shiftIdArr[i].shiftLength + 'px'
-
-                        //     // I'm not sure what is going to be inside the shift, till then I'll just remove it content
-
-                        // }
 
                     }
 
@@ -473,7 +458,7 @@ export default class Shift extends Component {
 
                 // we need to get all the side shifts in here and zero them
 
-                shift.style.width = partObj.partStart + partObj.partLength - shiftOldLeft + 'px'
+                shift.style.width = partObj.partStart + partObj.partLength - shiftOldLeft - 2 + 'px'
 
                 for (let i = 0; i < shiftIdArr.length; i++) {
 
@@ -486,9 +471,9 @@ export default class Shift extends Component {
 
                 }
 
-                this.setState({ shiftLength: partObj.partStart + partObj.partLength - shiftOldLeft })
+                this.setState({ shiftLength: partObj.partStart + partObj.partLength - shiftOldLeft - 2 })
 
-                this.setState({ shiftLengthFinal: partObj.partStart + partObj.partLength - shiftOldLeft })
+                this.setState({ shiftLengthFinal: partObj.partStart + partObj.partLength - shiftOldLeft - 2 })
 
             } else if (eve.pageX - dropAreaLeft < shortestShift + shiftOldLeft + partObj.partStart) {
 
@@ -566,17 +551,25 @@ export default class Shift extends Component {
 
     }
 
-    showShiftStart = () => {
+    showStartHour = () => {
 
         if (this.state.shiftLeftFinal === undefined) {
 
-            return this.props.shiftData.shiftStart + this.props.partObj.partStart
+            var startMinute = (this.props.shiftData.shiftStart + this.props.partObj.partStart) * 2 % 60
+            var startHour = (Math.floor((this.props.shiftData.shiftStart + this.props.partObj.partStart) / 30) + this.props.dayStart) % 24
 
         } else {
 
-            return this.state.shiftLeftFinal + this.props.partObj.partStart
+            startMinute = (this.state.shiftLeftFinal + this.props.partObj.partStart) * 2 % 60
+            startHour = (Math.floor((this.state.shiftLeftFinal + this.props.partObj.partStart) / 30) + this.props.dayStart) % 24
 
         }
+
+        if (startMinute < 10) {
+
+            return `${startHour}:0${startMinute}`
+
+        } else return `${startHour}:${startMinute}`
 
     }
 
@@ -584,17 +577,69 @@ export default class Shift extends Component {
 
         if (this.state.shiftLeftFinal === undefined && this.state.shiftLengthFinal === undefined) {
 
-            return this.props.shiftData.shiftStart + this.props.shiftData.shiftLength + this.props.partObj.partStart
+            var endMinute = (this.props.shiftData.shiftStart + this.props.shiftData.shiftLength + this.props.partObj.partStart) * 2 % 60
+            var endHour = (Math.floor((this.props.shiftData.shiftStart + this.props.shiftData.shiftLength + this.props.partObj.partStart) / 30) + this.props.dayStart) % 24
 
         } else if (this.state.shiftLeftFinal === undefined && this.state.shiftLengthFinal !== undefined) {
 
-            return this.props.shiftData.shiftStart + this.state.shiftLengthFinal + this.props.partObj.partStart
+            endMinute = (this.props.shiftData.shiftStart + this.state.shiftLengthFinal + this.props.partObj.partStart) * 2 % 60
+            endHour = (Math.floor((this.props.shiftData.shiftStart + this.state.shiftLengthFinal + this.props.partObj.partStart) / 30) + this.props.dayStart) % 24
 
         } else if (this.state.shiftLeftFinal !== undefined && this.state.shiftLengthFinal !== undefined) {
 
-            return this.state.shiftLeftFinal + this.state.shiftLengthFinal + this.props.partObj.partStart
+            endMinute = (this.state.shiftLeftFinal + this.state.shiftLengthFinal + this.props.partObj.partStart) * 2 % 60
+            endHour = (Math.floor((this.state.shiftLeftFinal + this.state.shiftLengthFinal + this.props.partObj.partStart) / 30) + this.props.dayStart) % 24
 
         }
+
+        if (endMinute < 10) {
+
+            return `${endHour}:0${endMinute}`
+
+        } else return `${endHour}:${endMinute}`
+
+
+
+    }
+
+    resizerWidth = () => {
+
+        if (this.state.shiftLengthFinal === undefined) {
+
+            if (this.props.shiftData.shiftLength >= 100) {
+
+                return 4
+
+            } else if (this.props.shiftData.shiftLength >= 50 && this.props.shiftData.shiftLength < 100) {
+
+                return 3
+
+            } else if (this.props.shiftData.shiftLength < 50) {
+
+                return 2
+
+            }
+
+
+
+        } else {
+
+            if (this.state.shiftLengthFinal >= 100) {
+
+                return 4
+
+            } else if (this.state.shiftLengthFinal >= 50 && this.state.shiftLengthFinal < 100) {
+
+                return 3
+
+            } else if (this.state.shiftLengthFinal < 50) {
+
+                return 2
+
+            }
+
+        }
+
 
 
 
@@ -629,7 +674,7 @@ export default class Shift extends Component {
 
                 <div style={{ display: 'flex', pointerEvents: 'none' }}>
 
-                    <div style={{ backgroundColor: '#888888', width: '2px', height: '100%', cursor: 'ew-resize', pointerEvents: 'initial' }}
+                    <div style={{ backgroundColor: '#888888', width: `${this.resizerWidth()}px`, height: '100%', cursor: 'ew-resize', pointerEvents: 'initial' }}
                         className='leftResizer'
                         onMouseDown={this.resizeShift}
                     ></div>
@@ -638,7 +683,7 @@ export default class Shift extends Component {
                         className='shiftDataDiv'
                         style={{ display: `${this.dataDivView()}`, zIndex: 0, fontSize: '8px', pointerEvents: 'none', backgroundColor: '#aaaaaa' }}
                     >
-                        {this.showShiftStart()}
+                        {this.showStartHour()}
                     </div>
 
                 </div>
@@ -666,7 +711,7 @@ export default class Shift extends Component {
                         {this.showShiftEnd()}
                     </div>
 
-                    <div style={{ backgroundColor: '#888888', width: '2px', height: '100%', cursor: 'ew-resize', pointerEvents: 'initial' }}
+                    <div style={{ backgroundColor: '#888888', width: `${this.resizerWidth()}px`, height: '100%', cursor: 'ew-resize', pointerEvents: 'initial' }}
                         className='rightResizer'
                         onMouseDown={this.resizeShift}
 

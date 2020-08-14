@@ -26,6 +26,7 @@ export default class Day extends Component {
                                     key={postInd}
                                     shiftSet={this.props.shiftSet}
                                     workerDB={this.props.workerDB}
+                                    dayStart={this.props.dayStart}
 
                                     dayInd={this.props.dayInd}
                                     postInd={postInd}

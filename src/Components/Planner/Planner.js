@@ -103,6 +103,7 @@ export default class Planner extends Component {
                                     key={dayInd}
                                     shiftSet={this.props.shiftSet}
                                     workerDB={this.props.workerDB}
+                                    dayStart={this.props.dayStart}
                                     dayInd={dayInd}
 
                                     markerWorkerID2={this.props.markerWorkerID1}
