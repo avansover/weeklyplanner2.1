@@ -10,6 +10,7 @@ import HomePage from './Components/HomePage.js';
 import Login from './Components/Login';
 import SignUp from './Components/SignUp';
 import Worker from './Components/Personal/Worker';
+import { Button } from 'react-bootstrap';
 //import ContextProvider from './Context/Context.js';
 //import { Context } from './Context/Context';
 // import ContextProvider, { Context } from './Context/Context.js';
@@ -137,7 +138,7 @@ export default class App extends Component {
     //when dropping the shift or leaving the the drop area
     //the marker is deleted
 
-    this.setData()
+    //this.setData()
 
     this.setState({ entanglement: undefined })
 
@@ -160,15 +161,15 @@ export default class App extends Component {
 
         <div style={{ display: 'flex', position: "relative" }}>
 
-          <div>
+          <div className='logInOutMenuBtDiv'>
             <Link to='/login'>
-              <button>log in</button>
+              <Button variant="outline-primary">log in</Button>
             </Link>
           </div>
 
-          <div>
+          <div className='logInOutMenuBtDiv'>
             <Link to='/signup'>
-              <button>signup</button>
+              <Button variant="outline-primary">signup</Button>
             </Link>
           </div>
 
@@ -188,7 +189,7 @@ export default class App extends Component {
 
           <div>
             <Link to='/'>
-              <button onClick={() => this.setState({ higherBarView: 'in' })}>logout</button>
+              <Button variant="outline-primary" onClick={() => this.setState({ higherBarView: 'in' })}>logout</Button>
             </Link>
           </div>
 
@@ -218,27 +219,27 @@ export default class App extends Component {
 
         <div style={{ display: 'flex', position: "relative" }}>
 
-          <div>
+          <div className='mainMenuBtDiv'>
             <Link to='/planner' draggable={false}>
-              <button>Planner</button>
+              <Button variant="primary">Planner</Button>
             </Link>
           </div>
 
-          <div>
+          <div className='mainMenuBtDiv'>
             <Link to='/personal' draggable={false}>
-              <button>Personal</button>
+              <Button variant="primary">Personal</Button>
             </Link>
           </div>
 
-          <div>
+          <div className='mainMenuBtDiv'>
             <Link to='/setplanner' draggable={false}>
-              <button>Set Planner</button>
+              <Button variant="primary">Set Planner</Button>
             </Link>
           </div>
 
-          <div>
+          <div className='mainMenuBtDiv'>
             <Link to='/history' draggable={false}>
-              <button>History</button>
+              <Button variant="primary">History</Button>
             </Link>
           </div>
 
@@ -253,11 +254,11 @@ export default class App extends Component {
 
   login = () => {
 
-    let data = localStorage.getItem('shiftDB')
+    // let data = localStorage.getItem('shiftDB')
 
-    data = JSON.parse(data)
+    // data = JSON.parse(data)
 
-    this.setState({shiftSet: data})
+    // this.setState({shiftSet: data})
 
     this.setState({ higherBarView: 'out' })
 
@@ -265,9 +266,35 @@ export default class App extends Component {
 
   deleteShift = (shiftDB) => {
 
-    this.setData()
+    //this.setData()
 
     this.setState({ shiftSet: shiftDB })
+
+  }
+
+  deleteAllShift = () => {
+
+    console.log('deleteAllShift');
+
+    let tempShiftDB = [...this.state.shiftSet]
+
+    for (let dayInd = 0; dayInd < tempShiftDB.length; dayInd++) {
+
+      for (let postInd = 0; postInd < tempShiftDB[dayInd].posts.length; postInd++) {
+
+        for (let partInd = 0; partInd < tempShiftDB[dayInd].posts[postInd].parts.length; partInd++) {
+
+          tempShiftDB[dayInd].posts[postInd].parts[partInd].shifts = []
+
+        }
+
+      }
+
+    }
+
+    this.setState({ shiftSet: tempShiftDB })
+
+    //this.setData()
 
   }
 
@@ -404,7 +431,7 @@ export default class App extends Component {
 
       }
 
-      
+
 
 
     }
@@ -440,8 +467,8 @@ export default class App extends Component {
     }
 
 
-    this.setData()
-    // need to merge shifts
+    //this.setData()
+
     this.setState({ shiftSet: tempShiftDB })
 
   }
@@ -461,7 +488,7 @@ export default class App extends Component {
 
     console.log(data);
 
-    this.setState({shiftSet: data})
+    this.setState({ shiftSet: data })
 
   }
 
@@ -482,8 +509,8 @@ export default class App extends Component {
       //<ContextProvider>
       <div>
 
-        <button onClick={() => this.setData()}>set Data</button>
-        <button onClick={() => this.getData()}>get Data</button>
+        {/* <button onClick={() => this.setData()}>set Data</button>
+        <button onClick={() => this.getData()}>get Data</button> */}
 
         <Router>
 
@@ -517,6 +544,7 @@ export default class App extends Component {
               return <Planner
                 deleteMarker={this.deleteMarker}
                 deleteShift={this.deleteShift}
+                deleteAllShift={this.deleteAllShift}
 
                 setResizeData={this.setResizeData}
 

@@ -110,13 +110,20 @@ export default class PostPart extends Component {
             //should also make the same for marker
             //console.log(shiftMap[i].st);
 
-            if (dropAreaAxisX >= shiftMap[i].st) {
+            console.log(dropAreaAxisX);
 
-                //console.log('after the start');
+            console.log(shiftMap[i].st);
+            console.log(shiftMap[i].ln);
 
-                if (dropAreaAxisX < shiftMap[i].st + shiftMap[i].ln) {
+            console.log(shiftMap[i].st+shiftMap[i].ln);
 
-                    //console.log('steped on');
+            if (dropAreaAxisX >= shiftMap[i].st - partStart) {
+
+                console.log('after the start');
+
+                if (dropAreaAxisX <= shiftMap[i].st + shiftMap[i].ln - partStart) {
+
+                    console.log('steped on');
 
                    return
                     

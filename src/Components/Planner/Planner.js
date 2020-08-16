@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import WorkersBox from './WorkersBox'
 import Day from './Day';
 import ContextProvider from '../../Context/Context'
+import PlannerStats from './PlannerStats';
 
 export default class Planner extends Component {
 
@@ -89,10 +90,7 @@ export default class Planner extends Component {
                     </div>
 
 
-                    <div id='plannerDiv'
-
-
-                    >
+                    <div id='plannerDiv'>
                         {this.props.shiftSet.map((e, dayInd) => {
                             return (
                                 <Day
@@ -112,6 +110,13 @@ export default class Planner extends Component {
                             )
                         })}
 
+                    </div>
+
+                    <div>
+                        <PlannerStats
+                        deleteAllShift={this.props.deleteAllShift}
+                        />
+                        
                     </div>
 
                 </div>

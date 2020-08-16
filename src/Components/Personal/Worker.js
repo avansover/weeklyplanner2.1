@@ -10,7 +10,7 @@ export default class Worker extends Component {
                 <div>
 
                     <Dropdown>
-                        <Dropdown.Toggle variant="success" id="dropdown-basic">
+                        <Dropdown.Toggle variant="primary" id="dropdown-basic">
                             Dropdown Button
                             </Dropdown.Toggle>
 
@@ -27,7 +27,7 @@ export default class Worker extends Component {
 
                     Worker id is {this.props.workerID}
 
-                    <Button>Delete Worker</Button>
+                    <Button variant="warning">Delete Worker</Button>
 
                 </div>
 
