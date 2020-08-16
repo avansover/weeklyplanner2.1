@@ -23,7 +23,7 @@ export default class App extends Component {
 
       shiftSet: [
         {
-          name: 'Su', posts: [
+          name: 'Su', date: '', posts: [
             {
               name: 'post1', parts: [
                 { partStart: 0, partLength: 722, shifts: [] }]
@@ -82,13 +82,7 @@ export default class App extends Component {
             },
             {
               name: 'post4', parts:
-                [{
-                  partStart: 240, partLength: 242, shifts: [
-                    { workerId: '15', part: 0, shiftStart: 0, shiftLength: 70, shiftId: 'd4p1t0s240w15' },
-                    { workerId: '1', part: 0, shiftStart: 80, shiftLength: 70, shiftId: 'd4p1t0s320w1' },
-                    { workerId: '2', part: 0, shiftStart: 160, shiftLength: 80, shiftId: 'd4p1t0s400w2' },
-                  ]
-                }]
+                [{ partStart: 240, partLength: 242, shifts: [] }]
             }
           ]
         },
@@ -142,6 +136,8 @@ export default class App extends Component {
 
     //when dropping the shift or leaving the the drop area
     //the marker is deleted
+
+    this.setData()
 
     this.setState({ entanglement: undefined })
 
@@ -257,11 +253,19 @@ export default class App extends Component {
 
   login = () => {
 
+    let data = localStorage.getItem('shiftDB')
+
+    data = JSON.parse(data)
+
+    this.setState({shiftSet: data})
+
     this.setState({ higherBarView: 'out' })
 
   }
 
   deleteShift = (shiftDB) => {
+
+    this.setData()
 
     this.setState({ shiftSet: shiftDB })
 
@@ -400,6 +404,9 @@ export default class App extends Component {
 
       }
 
+      
+
+
     }
 
     //console.log(tempShiftDB[dayInd].posts[postInd].parts[partInd].shifts);
@@ -433,7 +440,7 @@ export default class App extends Component {
     }
 
 
-
+    this.setData()
     // need to merge shifts
     this.setState({ shiftSet: tempShiftDB })
 
@@ -441,17 +448,20 @@ export default class App extends Component {
 
   setData = () => {
 
-    let obj = this.state.workerDB
-    localStorage.setItem('workerDB', JSON.stringify(obj))
+    let obj = this.state.shiftSet
+    localStorage.setItem('shiftDB', JSON.stringify(obj))
 
   }
 
   getData = () => {
 
-    let data = localStorage.getItem('workerDB')
+    let data = localStorage.getItem('shiftDB')
 
     data = JSON.parse(data)
+
     console.log(data);
+
+    this.setState({shiftSet: data})
 
   }
 

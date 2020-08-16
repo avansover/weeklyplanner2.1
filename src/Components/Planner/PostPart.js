@@ -95,10 +95,38 @@ export default class PostPart extends Component {
 
         let dropAreaLeft = document.getElementsByClassName('dropAreaDiv')[0].parentNode.offsetLeft
 
+        let partObj = this.props.partObj
         let partStart = this.props.partObj.partStart
         let endOfPart = this.props.partObj.partLength
 
         var dropAreaAxisX = axisX - dropAreaLeft - partStart
+
+        let shiftMap = partObj.shifts.map((o) => ({ st: o.shiftStart + partStart, ln: o.shiftLength }))
+
+        console.log(shiftMap);
+
+        for (let i = 0; i < shiftMap.length; i++) {
+
+            //should also make the same for marker
+            //console.log(shiftMap[i].st);
+
+            if (dropAreaAxisX >= shiftMap[i].st) {
+
+                //console.log('after the start');
+
+                if (dropAreaAxisX < shiftMap[i].st + shiftMap[i].ln) {
+
+                    //console.log('steped on');
+
+                   return
+                    
+                }
+
+            }
+
+        }
+
+        
 
         if (dropAreaAxisX > -1 && dropAreaAxisX < endOfPart - 2) {
 
@@ -130,7 +158,7 @@ export default class PostPart extends Component {
 
             }
 
-            console.log(shiftStr);
+            // console.log(shiftStr);
 
             // in that new sorted array, we check where is mouse pointer is positioned
 
@@ -227,6 +255,8 @@ export default class PostPart extends Component {
 
         }
 
+
+
     }
 
     shiftSorter = () => {
@@ -243,7 +273,7 @@ export default class PostPart extends Component {
                 let firstShift = shiftDB[dayInd].posts[postInd].parts[partInd].shifts[i]
                 let secondShift = shiftDB[dayInd].posts[postInd].parts[partInd].shifts[i + 1]
 
-                console.log(shiftDB[dayInd].posts[postInd].parts[partInd].shifts[i].shiftStart);
+                //console.log(shiftDB[dayInd].posts[postInd].parts[partInd].shifts[i].shiftStart);
 
                 if (firstShift.shiftStart > secondShift.shiftStart) {
 

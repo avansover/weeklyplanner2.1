@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Dropdown } from 'react-bootstrap'
+import { Dropdown, Button } from 'react-bootstrap'
 
 export default class Worker extends Component {
     render() {
@@ -26,6 +26,8 @@ export default class Worker extends Component {
                 <div>
 
                     Worker id is {this.props.workerID}
+
+                    <Button>Delete Worker</Button>
 
                 </div>
 
