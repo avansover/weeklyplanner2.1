@@ -157,7 +157,7 @@ export default class ShiftMarker extends Component {
 
         let startHour = (Math.floor((this.props.partObj.partStart + markerStart) / 30) + this.props.dayStart) % 24
 
-        let endMinute = (this.props.partObj.partStart + markerStart + markerLength)* 2 % 60
+        let endMinute = (this.props.partObj.partStart + markerStart + markerLength) * 2 % 60
 
         if (endMinute < 10) {
 
@@ -236,7 +236,9 @@ export default class ShiftMarker extends Component {
                     width: `${this.markerData().mrkLnth}px`,
                     left: `${this.markerData().mrkStr}px`,
                     backgroundColor: `${this.markerColor()}`,
-                    pointerEvents: 'none'
+                    borderRadius: '5px',
+                    pointerEvents: 'none',
+
                 }}
             >
                 <div

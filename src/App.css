@@ -20,6 +20,13 @@
   width: fit-content;
 }
 
+#plannerStatsBody{
+  border: 1px solid black;
+  border-radius: 5px;
+  margin-left: 0.125rem;
+  padding: 0.125rem;
+}
+
 #DASDiv {
   color: #ffff00;
   border: 3px solid black;

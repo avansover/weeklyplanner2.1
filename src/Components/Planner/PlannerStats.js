@@ -20,7 +20,7 @@ export default class PlannerStats extends Component {
 
     render() {
         return (
-            <div>
+            <div id='plannerStatsBody'>
 
                 PlannerStats
                 <Button variant="warning" onClick={() => this.setState({ DASView: 'flex' })}>Delete all shifts</Button>
@@ -34,16 +34,12 @@ export default class PlannerStats extends Component {
                         </div>
 
                         <div className='mainMenuBtDiv'>
-                            <Button variant="danger" onClick={() => this.deleteAllShift()}>I know what I'm doing</Button>
+                            <Button variant="danger" onClick={() => this.deleteAllShift()}>Step aside, I know what I'm doing</Button>
                         </div>
 
                     </div>
 
-
                 </div>
-
-
-
 
             </div>
         )

@@ -133,8 +133,6 @@ export default class PostPart extends Component {
 
         }
 
-        
-
         if (dropAreaAxisX > -1 && dropAreaAxisX < endOfPart - 2) {
 
             // making and array for all the starting point of the shifts + the mouse pointer

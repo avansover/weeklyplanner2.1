@@ -15,9 +15,7 @@ export default class Worker extends Component {
                             </Dropdown.Toggle>
 
                         <Dropdown.Menu>
-
                             {this.props.workerDB.map((o, i) => { return (<Dropdown.Item href={`#/worker${o.id}`} key={i}>{o.id}</Dropdown.Item>) })}
-
                         </Dropdown.Menu>
                     </Dropdown>
 

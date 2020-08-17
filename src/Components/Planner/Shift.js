@@ -65,13 +65,13 @@ export default class Shift extends Component {
 
                 return (<div> {workerFromWrokerDB[0].firstName} {workerFromWrokerDB[0].lastName} </div>)
 
-            } else if (shiftLength < 160 && shiftLength > 100) {
+            } else if (shiftLength < 160 && shiftLength > 120) {
 
                 //this won't work till the resizing effect the DB
 
                 return (<div> {workerFromWrokerDB[0].firstName}. {workerFromWrokerDB[0].lastName.charAt(0)} </div>)
 
-            } else if (shiftLength <= 100) {
+            } else if (shiftLength <= 120) {
 
                 return (<div> {workerFromWrokerDB[0].firstName.charAt(0)}. {workerFromWrokerDB[0].lastName.charAt(0)} </div>)
 
@@ -82,11 +82,11 @@ export default class Shift extends Component {
 
             return (<div> {workerFromWrokerDB[0].firstName} {workerFromWrokerDB[0].lastName} </div>)
 
-        } else if (this.state.shiftLength < 160 && this.state.shiftLength > 100) {
+        } else if (this.state.shiftLength < 160 && this.state.shiftLength > 120) {
 
             return (<div> {workerFromWrokerDB[0].firstName}. {workerFromWrokerDB[0].lastName.charAt(0)} </div>)
 
-        } else if (this.state.shiftLength <= 100) {
+        } else if (this.state.shiftLength <= 120) {
 
             return (<div> {workerFromWrokerDB[0].firstName.charAt(0)}. {workerFromWrokerDB[0].lastName.charAt(0)} </div>)
 
@@ -242,11 +242,11 @@ export default class Shift extends Component {
                 this.setState({ shiftLengthFinal: shiftLengthFinal })
 
 
-                if (shiftLengthFinal < 60) {
+                if (shiftLengthFinal < 70) {
 
                     this.setState({ shiftDataVIew: 'none' })
 
-                } else if (shiftLengthFinal >= 60) {
+                } else if (shiftLengthFinal >= 70) {
 
                     this.setState({ shiftDataVIew: 'flex' })
 
@@ -389,11 +389,11 @@ export default class Shift extends Component {
 
                 this.setState({ shiftLengthFinal: shiftLengthFinal })
 
-                if (shiftLengthFinal < 60) { //this "if" removes the divs from the activly resized shift once it get too small
+                if (shiftLengthFinal < 70) { //this "if" removes the divs from the activly resized shift once it get too small
 
                     this.setState({ shiftDataVIew: 'none' })
 
-                } else if (shiftLengthFinal >= 60) {
+                } else if (shiftLengthFinal >= 70) {
 
                     this.setState({ shiftDataVIew: 'flex' })
 
@@ -528,11 +528,11 @@ export default class Shift extends Component {
 
         } else {
 
-            if (this.props.shiftData.shiftLength >= 60) {
+            if (this.props.shiftData.shiftLength >= 70) {
 
                 return 'flex'
 
-            } else if (this.props.shiftData.shiftLength < 60) {
+            } else if (this.props.shiftData.shiftLength < 70) {
 
                 return 'none'
 
@@ -710,7 +710,13 @@ export default class Shift extends Component {
                         pointerEvents: 'none',
                         position: "relative",
                         zIndex: 0,
-                        fontSize: '12px'
+                        height: 'fit-content',
+                        fontSize: '12px',
+                        backgroundColor: '#ffffff',
+                        alignSelf: 'center',
+                        paddingRight: '3px',
+                        paddingLeft: '3px',
+                        borderRadius: '4px'
 
                     }}
                 >
